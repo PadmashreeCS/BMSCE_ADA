@@ -1,0 +1,59 @@
+#include <stdio.h>
+
+#define MAX 10
+
+int main() {
+    int n, i, j;
+    int graph[MAX][MAX];
+    int indegree[MAX] = {0};
+    int visited[MAX] = {0};
+    int count = 0;
+
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+
+    printf("Enter adjacency matrix:\n");
+
+    // Read adjacency matrix
+    for(i = 0; i < n; i++) {
+        for(j = 0; j < n; j++) {
+            scanf("%d", &graph[i][j]);
+        }
+    }
+
+    // Find indegree of each vertex
+    for(i = 0; i < n; i++) {
+        for(j = 0; j < n; j++) {
+            if(graph[i][j] == 1) {
+                indegree[j]++; // indree of j value 
+            }
+        }
+    }
+
+    printf("Topological Order: ");
+
+    // Repeat until all vertices are processed
+    while(count < n) {
+
+        // Find vertex with indegree 0
+        for(i = 0; i < n; i++) {
+
+            if(indegree[i] == 0 && visited[i] == 0) {
+
+                printf("%d ", i);
+
+                visited[i] = 1;
+                count++;
+
+                // Reduce indegree of adjacent vertices
+                for(j = 0; j < n; j++) {
+                    if(graph[i][j] == 1) {
+                        indegree[j]--;
+                    }
+                }
+            }
+        }
+    }
+
+    return 0;
+}
