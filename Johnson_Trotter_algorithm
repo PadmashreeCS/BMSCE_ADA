@@ -1,0 +1,108 @@
+#include <stdio.h>
+
+#define LEFT -1
+#define RIGHT 1
+
+// Function to print permutation
+void printPermutation(int a[], int n)
+{
+    int i;
+    for(i = 0; i < n; i++)
+        printf("%d ", a[i]);
+    printf("\n");
+}
+
+// Find position of largest mobile element
+int getMobile(int a[], int dir[], int n)
+{
+    int mobile = 0;
+    int mobile_pos = -1;
+    int i;
+
+    for(i = 0; i < n; i++)
+    {
+        // Moving left
+        if(dir[i] == LEFT && i != 0) //ex: all left(1,2,3) 1 can't move left no space exit, so 1!=0
+        {
+            if(a[i] > a[i-1] && a[i] > mobile)
+            {
+                mobile = a[i];
+                mobile_pos = i;
+            }
+        }
+
+        // Moving right
+        if(dir[i] == RIGHT && i != n-1)// ex all right(1,2,3) 3 can't go to right, no space exit so, 1!=n-1
+        {
+            if(a[i] > a[i+1] && a[i] > mobile)
+            {
+                mobile = a[i];
+                mobile_pos = i;
+            }
+        }
+    }
+
+    return mobile_pos;
+}
+
+int main()
+{
+    int n, i;
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    int a[n];
+    int dir[n];
+
+    // Initial permutation
+    for(i = 0; i < n; i++)
+    {
+        a[i] = i + 1;
+        dir[i] = LEFT;
+    }
+
+    printPermutation(a, n);
+
+    while(1)
+    {
+        int pos = getMobile(a, dir, n);
+
+        // No mobile element
+        if(pos == -1)
+            break;
+
+        int swapPos;
+
+        // Move left
+        if(dir[pos] == LEFT)
+            swapPos = pos - 1;
+
+        // Move right
+        else
+            swapPos = pos + 1;
+
+        // Swap elements
+        int temp = a[pos];
+        a[pos] = a[swapPos];
+        a[swapPos] = temp;
+
+        // Swap directions
+        temp = dir[pos];
+        dir[pos] = dir[swapPos];
+        dir[swapPos] = temp;
+
+        pos = swapPos;
+
+        // Reverse direction of larger elements
+        for(i = 0; i < n; i++)
+        {
+            if(a[i] > a[pos])
+                dir[i] = -dir[i];
+        }
+
+        printPermutation(a, n);
+    }
+
+    return 0;
+}
