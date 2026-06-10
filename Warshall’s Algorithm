@@ -1,0 +1,65 @@
+#include <stdio.h>
+
+// Define the number of vertices in the graph (n = 4 for vertices a, b, c, d)
+#define N 4
+
+// Function to print a matrix
+void printMatrix(int matrix[N][N]) {
+    char vertices[] = {'a', 'b', 'c', 'd'};
+    
+    printf("    a  b  c  d\n");
+    for (int i = 0; i < N; i++) {
+        printf("%c | ", vertices[i]);
+        for (int j = 0; j < N; j++) {
+            printf("%d  ", matrix[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+// Function implementing Warshall's Algorithm
+void warshall(int graph[N][N]) {
+    int R[N][N];
+
+    // Initialize R(0) as the adjacency matrix of the graph
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            R[i][j] = graph[i][j];
+        }
+    }
+
+    // Three nested loops as shown in your notes: O(n^3) time complexity
+    // k is the intermediate vertex
+    for (int k = 0; k < N; k++) {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                // Formula from notes: R(k)[i,j] = R(k-1)[i,j] OR (R(k-1)[i,k] AND R(k-1)[k,j])
+                R[i][j] = R[i][j] || (R[i][k] && R[k][j]);
+            }
+        }
+    }
+
+    // Print the final solution matrix (Transitive Closure)
+    printf("Final Transitive Closure Matrix R(4):\n");
+    printMatrix(R);
+}
+
+int main() {
+    // Adjacency matrix R(0) from your first image
+    // Vertices mapped: 0 -> a, 1 -> b, 2 -> c, 3 -> d
+    int graph[N][N] = {
+        {0, 1, 0, 0},  // a
+        {0, 0, 0, 1},  // b
+        {0, 0, 0, 0},  // c
+        {1, 0, 1, 0}   // d
+    };
+
+    printf("Initial Adjacency Matrix R(0):\n");
+    printMatrix(graph);
+
+    // Run the algorithm
+    warshall(graph);
+
+    return 0;
+}
