@@ -1,0 +1,30 @@
+#include <stdio.h>
+
+// Recursive function based on your notes
+int peasant(int x, int y) {
+    // Base case: if x is 1, return y
+    if (x == 1) {
+        return y;
+    }
+    
+    // If x is odd, return y + peasant(x/2, 2*y)
+    if (x % 2 != 0) {
+        return y + peasant(x / 2, y * 2);
+    } 
+    // If x is even, return peasant(x/2, 2*y)
+    else {
+        return peasant(x / 2, y * 2);
+    }
+}
+
+int main() {
+    // Testing with the example from your second image: 46 * 324
+    int x = 46;
+    int y = 324;
+    
+    int result = peasant(x, y);
+    
+    printf("Result of %d * %d = %d\n", x, y, result);
+    
+    return 0;
+}
